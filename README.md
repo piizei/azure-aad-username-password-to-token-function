@@ -13,3 +13,31 @@ The function excepts 2 query parameters
 * username
 * password
 and returns a JWT token for that user.
+
+You can use it together with APIM using this policy (Logs in with the function and forwards JWT token as Bearer)
+Note: You would put the function url into Named Values of the gateway (as a secret, as it contains password...). 
+Here the names value is called 'url'
+```
+<policies>
+    <inbound>
+        <send-request mode="new" response-variable-name="jwttoken" timeout="20" ignore-error="true">
+            <set-url>{{url}}</set-url>
+            <set-method>GET</set-method>
+        </send-request>
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer "+((IResponse)context.Variables["jwttoken"]).Body.As<string>())</value>
+        </set-header>
+        <base />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
+```
+
