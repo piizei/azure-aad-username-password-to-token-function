@@ -22,7 +22,7 @@ namespace UsernamePasswordTokenFunction
             ILogger log)
         {
             var scopes = new string[] { "User.Read" };
-            var scopesString = Environment.GetEnvironmentVariable("scopes");
+            var scopesString = Environment.GetEnvironmentVariable("Scopes");
             if (!string.IsNullOrEmpty(scopesString))
             {
                 scopes = scopesString.Split(',');
